@@ -1,0 +1,48 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    max-width: 250px;
+    max-height: 350px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.wrapper:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cover {
+    border: 1px solid rgba(211, 211, 211, 0.15);
+    border-radius: 5px;
+    width: 225px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.info {
+    padding-top: 5px;
+    width: 100%;
+}
+
+.image {
+    width: 225px;
+    height: 225px;
+    object-fit: fill;
+}
+
+.title {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.timeText {
+    margin-left: 3px;
+    letter-spacing: -0.4px;
+}

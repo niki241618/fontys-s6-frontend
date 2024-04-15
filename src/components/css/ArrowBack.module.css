@@ -1,0 +1,18 @@
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+}
+
+.arrowButton {
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: 100ms;
+}
+
+.arrowButton:hover {
+    background-color: #f0f0f0;
+}
