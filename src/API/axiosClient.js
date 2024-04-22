@@ -26,5 +26,5 @@ const clientAudioFiles = axios.create({
 })
 
 const client = axios.create({
-    baseURL: 'http://gateway:8080/api/'
+    baseURL: 'http://localhost:8080/api/'
 })

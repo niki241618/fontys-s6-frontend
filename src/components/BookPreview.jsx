@@ -6,18 +6,18 @@ import {LuClock4} from "react-icons/lu";
 
 const BookPreview = ({book, onClick}) => {
     return (
-        <div className={css.wrapper} onClick={onClick}>
+        <div data-e2e-test="book-item" className={css.wrapper} onClick={onClick}>
             <div className={css.cover}>
                 <img className={css.image} src={book.coverUri} alt={book.title}/>
             </div>
             <div className={css.info}>
-                <span className={css.title}>{book.name}</span>
-                <p>{book.authors[0]}</p>
+                <span data-e2e-test='book-name' className={css.title}>{book.name}</span>
+                <p data-e2e-test='book-author'>{book.authors[0]}</p>
                 <div className='d-flex align-items-center justify-content-between'>
                     <div className='d-flex align-items-center'>
                         <FaStar color='#ffc107'/>
                         <div className='d-flex align-items-center'>
-                            <span className='ms-1'>{book.ratingInfo.averageRating}</span>
+                            <span data-e2e-test='book-rating' className='ms-1'>{book.ratingInfo.averageRating}</span>
                         </div>
                     </div>
                     <div className='d-flex align-items-center'>
