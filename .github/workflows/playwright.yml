@@ -1,0 +1,96 @@
+name: E2E Playwright Tests with Backend
+
+on:
+  push:
+    branches: [ main, 2-create-e2e-tests, dev ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the frontend code
+    - name: Checkout Frontend
+      uses: actions/checkout@v4
+      with:
+        path: 'frontend'
+
+    # Step 2: Checkout the backend code
+    - name: Checkout Backend
+      uses: actions/checkout@v4
+      with:
+        repository: 'niki241618/fontys-s6-backend'
+        path: 'backend'
+        ref: 'dev'
+
+    # Step 3: Setup Node.js for the frontend
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    # Step 4: Install frontend dependencies
+    - name: Install Frontend Dependencies
+      run: npm ci
+      working-directory: ./frontend
+
+    # Step 5: Setup Docker and run the backend
+    - name: Setup Docker
+      uses: docker/setup-buildx-action@v1
+
+    - name: Create .env file
+      run: |
+        cat << EOF > backend/.env
+        ConnectionStrings__DatabaseConnection=${{ secrets.CONNECTIONSTRINGS__DATABASECONNECTION }}
+        AzureBlobStorage__ConnectionString=${{ secrets.AZUREBLOBSTORAGE__CONNECTIONSTRING }}
+        SeedDatabase="true"
+        EOF
+      working-directory: ./
+      
+    - name: Print .env file content
+      run: cat backend/.env
+      working-directory: ./
+
+    - name: Build Docker Images with Specific Names
+      run: |
+        docker build -t book-info -f ./backend/Services/Dockerfile.bookinfo ./backend/Services
+        docker build -t book-streaming -f ./backend/Services/Dockerfile.bookstream ./backend/Services
+        docker build -t logger-service -f ./backend/Services/Dockerfile.logger ./backend/Services
+        docker build -t frontend ./frontend
+      working-directory: ./
+
+    - name: Docker Compose up
+      run: docker-compose up -d
+      working-directory: ./backend
+
+    - name: Print Docker Compose Logs
+      run: docker-compose logs
+      working-directory: ./backend
+
+    # Step 6: Install Playwright and browsers
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      working-directory: ./frontend
+
+    # Step 7: Run Playwright tests
+    - name: Run Playwright tests
+      run: npx playwright test
+      working-directory: ./frontend
+
+    # Step 8: Upload artifacts for the tests
+    - name: Upload Playwright Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: frontend/playwright-report/
+        retention-days: 30
+
+    # Step 9: Docker Compose down
+    - name: Docker Compose down
+      run: docker-compose down
+      working-directory: ./backend
