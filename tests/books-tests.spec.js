@@ -3,17 +3,13 @@ test.describe('Browse Books Page Tests', () => {
     test('should display correct books with details', async ({ page }) => {
         await page.goto(`http://localhost:3000/books`);
 
-        // Check if exactly three books are displayed
-        const bookItems = await page.locator('[data-e2e-test="book-item"]');
-        await expect(bookItems).toHaveCount(2);
-
         // Define expected books data
         const expectedBooks = [
-            // {
-            //     name: "Be Useful: Seven Tools for Life",
-            //     author: "Arnold Schwarzenegger",
-            //     rating: 0
-            // },
+            {
+                name: "Be Useful: Seven Tools for Life",
+                author: "Arnold Schwarzenegger",
+                rating: 0
+            },
             {
                 name: "The Black Veil",
                 author: "Boz",
@@ -25,6 +21,10 @@ test.describe('Browse Books Page Tests', () => {
                 rating: 0
             }
         ];
+
+        // Check if exactly three books are displayed
+        const bookItems = await page.locator('[data-e2e-test="book-item"]');
+        await expect(bookItems).toHaveCount(expectedBooks.length);
 
         // Verify each book's details
         for (let i = 0; i < expectedBooks.length; i++) {
@@ -41,7 +41,7 @@ test.describe('Browse Books Page Tests', () => {
 
 // Base URL and book ID for testing
 const baseURL = 'http://localhost:3000';
-const bookId = '7';
+const bookId = '1';
 
 test.describe('BookPage component tests', () => {
     test.beforeEach(async ({ page }) => {
