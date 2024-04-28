@@ -2,7 +2,6 @@ const { test, expect } = require('@playwright/test');
 test.describe('Browse Books Page Tests', () => {
     test('should display correct books with details', async ({ page }) => {
         await page.goto(`http://localhost:3000/books`);
-
         // Define expected books data
         const expectedBooks = [
             {
