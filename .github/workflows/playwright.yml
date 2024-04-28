@@ -6,12 +6,10 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-  
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-
     steps:
     # Step 1: Checkout the frontend code
     - name: Checkout Frontend
