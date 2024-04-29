@@ -38,7 +38,7 @@ const BrowseBooksPage = () => {
                 <Row className='mt-5'>
                     {
                         books.map(book => (
-                            <Col key={book.id} sm={3}>
+                            <Col key={book.id} sm={3} className='mb-4'>
                                 <BookPreview book={book} onClick={() => navigate(`/books/${book.id}`)}/>
                             </Col>
                         ))

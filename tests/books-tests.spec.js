@@ -41,7 +41,7 @@ test.describe('Browse Books Page Tests', () => {
 
 // Base URL and book ID for testing
 const baseURL = 'http://localhost:3000';
-const bookId = '1';
+const bookId = '2';
 
 test.describe('BookPage component tests', () => {
     test.beforeEach(async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe('BookPage component tests', () => {
 
         await expect(page.locator('span:text("Language") + div > div > span')).toHaveText('English');
         await expect(page.locator('span:text("Genre") + div > div > span')).toHaveText('Horror');
-        await expect(page.locator('span:text("Duration") + div > div > span')).toHaveText('32 Minutes');
+        await expect(page.locator('span:text("Duration") + div > div > span')).toHaveText('21 Minutes');
         await expect(page.locator('span:text("Rating") + div > div > span')).toHaveText('0');
     });
 
