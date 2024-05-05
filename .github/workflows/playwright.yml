@@ -2,7 +2,7 @@ name: E2E Playwright Tests with Backend
 
 on:
   push:
-    branches: [ main, 2-create-e2e-tests, dev ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
