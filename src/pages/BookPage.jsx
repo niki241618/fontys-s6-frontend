@@ -21,10 +21,10 @@ const BookPage = () => {
 
     const navigate = useNavigate()
 
-    if(isLoading)
-        return <LoadingSpinner/>
+    if (isLoading)
+        return <LoadingSpinner text={'Loading...'} />
 
-    if(error)
+    if (error)
         return null;
 
     const deleteTheBook = async () => {
@@ -32,17 +32,15 @@ const BookPage = () => {
             await deleteBook(id);
             toast.success('Book deleted successfully');
             navigate(-1);
-        }
-        catch (e)
-        {
+        } catch (e) {
             toast.error(e.message);
         }
     }
 
-    const BookInfoRowItem = ({icon, title, text, addition, addBorder = true}) => {
+    const BookInfoRowItem = ({ icon, title, text, addition, addBorder = true }) => {
         return (
-            <Col style={{borderRight: addBorder ? '1px solid #ddd' : ''}}>
-                <span className='text-center' style={{fontWeight: 600}}>{title}</span>
+            <Col style={{ borderRight: addBorder ? '1px solid #ddd' : '' }}>
+                <span className='text-center' style={{ fontWeight: 600 }}>{title}</span>
                 <div className='d-flex align-items-center'>
                     <div className={'d-flex align-items-center'}>
                         {icon}
@@ -56,40 +54,36 @@ const BookPage = () => {
 
     return (
         <Container className={css.wrapper}>
-            <ArrowBack path='/books'/>
+            <ArrowBack path='/books' />
             <Row>
                 <Col sm={3} className={css.imageColumn}>
-                    <img src={book.coverUri} alt={book.title} className={css.image}/>
+                    <img src={book.coverUri} alt={book.name} className={css.image} data-e2e-test="book-cover"/>
                 </Col>
                 <Col className='ms-2'>
                     <Row>
                         <Col>
                             <div className='d-flex justify-content-between'>
-                                <h2 className={css.title}>{book.name}</h2>
-                                <Button variant='danger' onClick={deleteTheBook}>Delete</Button>
+                                <h2 className={css.title} data-e2e-test="book-title">{book.name}</h2>
+                                <Button variant='danger' onClick={deleteTheBook} data-e2e-test="delete-button">Delete</Button>
                             </div>
 
                             <div className='d-flex align-items-center mt-1'>
                                 <MdPerson size={20}/>
-                                <span>{book.authors[0]}</span>
+                                <span data-e2e-test="book-author">{book.authors.slice(0,2).join(', ')}</span>
                             </div>
                         </Col>
                     </Row>
                     <hr/>
                     <Row>
                         <BookInfoRowItem icon={<LuClock4/>} title='Duration' text={`${secToMin(book.length)} Minutes`}/>
-                        <BookInfoRowItem icon={<FaStar color='#ffc107'/>}
-                                         title={`Rating`}
-                                         text={`${book.ratingInfo.averageRating}`}
-                                         addition={`(${(book.ratingInfo.averageRating).toLocaleString().replace(/,/g, ' ')})`}/>
-
+                        <BookInfoRowItem icon={<FaStar color='#ffc107'/>} title='Rating' text={`${book.ratingInfo.averageRating}`} addition={`(${book.ratingInfo.totalRatings})`}/>
                         <BookInfoRowItem icon={<IoEarth/>} title='Language' text={book.language}/>
                         <BookInfoRowItem icon={<BiSolidCategory/>} title='Genre' text={book.genre} addBorder={false}/>
                     </Row>
                     <hr/>
                     <Row className={css.info}>
                         <Col>
-                            <span>{book.description}</span>
+                            <span data-e2e-test="book-description">{book.description}</span>
                         </Col>
                     </Row>
                 </Col>
@@ -99,7 +93,6 @@ const BookPage = () => {
                     <AudioPlayer fileName={book.audioFileName}/>
                 </Col>
             </Row>
-
         </Container>
     );
 };
