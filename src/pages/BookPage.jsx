@@ -14,10 +14,15 @@ import ArrowBack from "../components/ArrowBack";
 import AudioPlayer from "../components/AudioPlayer";
 import {deleteBook} from "../API/booksService";
 import {toast} from "react-toastify";
+import {useAuth0} from "@auth0/auth0-react";
+import useClaims from "../hooks/useClaims";
 
 const BookPage = () => {
     const { id } = useParams();
     const { data: book, isLoading, error } = useFetch(`/audiobooks/${id}`)
+    const {user} = useAuth0();
+    const {hasClaim} = useClaims()
+
 
     const navigate = useNavigate()
 
@@ -26,6 +31,9 @@ const BookPage = () => {
 
     if(error)
         return null;
+
+    const isBookOwned = user && book.ownerId === user.sub;
+    const isAdmin = hasClaim('role:admin')
 
     const deleteTheBook = async () => {
         try {
@@ -56,19 +64,23 @@ const BookPage = () => {
 
     return (
         <Container className={css.wrapper}>
-            <ArrowBack path='/books'/>
+            <ArrowBack path={-1}/>
             <Row>
-                <Col sm={3} className={css.imageColumn}>
+                <Col md={3} className={`mb-3 mb-md-0 ${css.imageColumn}`}>
                     <img src={book.coverUri} alt={book.title} className={css.image}/>
                 </Col>
                 <Col className='ms-2'>
+                    {/*<Row>*/}
+                    {/*    <Col>*/}
+                    {/*        <h2>{book.name}</h2>*/}
+                    {/*    </Col>*/}
+                    {/*</Row>*/}
                     <Row>
                         <Col>
                             <div className='d-flex justify-content-between'>
                                 <h2 className={css.title}>{book.name}</h2>
-                                <Button variant='danger' onClick={deleteTheBook}>Delete</Button>
+                                {(isBookOwned || isAdmin) && <Button variant='danger' onClick={deleteTheBook}>Delete</Button>}
                             </div>
-
                             <div className='d-flex align-items-center mt-1'>
                                 <MdPerson size={20}/>
                                 <span>{book.authors[0]}</span>
@@ -94,6 +106,7 @@ const BookPage = () => {
                     </Row>
                 </Col>
             </Row>
+            <hr className='mt-4'/>
             <Row className='mt-4'>
                 <Col>
                     <AudioPlayer fileName={book.audioFileName}/>
