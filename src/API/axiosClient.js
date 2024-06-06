@@ -39,10 +39,11 @@ export const addAccessTokenInterceptor = (getAccessTokenSilently) => {
     client.interceptors.request.use(async (config) => {
         try {
             const token = await getAccessTokenSilently();
+            console.log(token)
             config.headers.Authorization = `Bearer ${token}`;
         }
         catch(ex) {
-            console.warn("An error occured while appending Bearer token to the request: " + ex);
+            console.warn("An error occurred while appending Bearer token to the request: " + ex);
         }
         return config;
     });
