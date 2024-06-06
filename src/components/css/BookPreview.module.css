@@ -20,7 +20,7 @@
 .cover {
     border: 1px solid rgba(211, 211, 211, 0.15);
     border-radius: 5px;
-    width: 225px;
+    width: 100%;
     height: 200px;
     overflow: hidden;
 }
@@ -31,8 +31,8 @@
 }
 
 .image {
-    width: 225px;
-    height: 225px;
+    width: 100%;
+    height: 100%;
     object-fit: fill;
 }
 

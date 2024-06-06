@@ -8,6 +8,7 @@ import MaxFileSizeInput from "../../components/MaxFileSizeInput";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {uploadBook} from "../../API/booksService";
+import {secToMin} from "../../utils";
 
 const UploadBookPage = () => {
     const [isUploading, setIsUploading] = useState(false);
@@ -15,6 +16,7 @@ const UploadBookPage = () => {
     const [book, setBook] = useState({ audioFile: null, coverImage: null });
 
     const navigate = useNavigate();
+
     const onSubmit = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -30,6 +32,7 @@ const UploadBookPage = () => {
             formData.append('authors',[form.elements.author.value]);
             formData.append('coverImage', book.coverImage);
             formData.append('audioFile', book.audioFile);
+            formData.append('length', book.length);
 
             uploadNewBook(formData);
         }
@@ -135,17 +138,35 @@ const UploadBookPage = () => {
                                                               label='Upload Book'
                                                               text='Maximum file size: 650 MB'
                                                               maxFileSizeInMB={650}
-                                                              onFileSelected={book => setBook({
-                                                                  ...book,
-                                                                  audioFile: book
-                                                              })}
+                                                              onFileSelected={file => {
+                                                                  const audioElement = new Audio(URL.createObjectURL(file));
+                                                                  audioElement.addEventListener('loadedmetadata', () => {
+                                                                      const duration = Math.floor(audioElement.duration);
+                                                                      setBook({
+                                                                          ...book,
+                                                                          audioFile: file,
+                                                                          length: duration
+                                                                      })
+                                                                    });
+                                                                  }
+                                                              }
                                                               className="mb-3"
+                                            />
+                                        </Col>
+                                        <Col xs={3}>
+                                            <Form.Label>Duration</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="0 seconds"
+                                                value={`${secToMin(book.length || 0)} Minutes`}
+                                                aria-label="Disabled input example"
+                                                readOnly
                                             />
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <MaxFileSizeInput accept='.jpeg,.jpg,.png'
+                                        <MaxFileSizeInput accept='.jpeg,.jpg,.png'
                                                               label='Cover Image'
                                                               text='Maximum file size: 1 MB'
                                                               maxFileSizeInMB={1}

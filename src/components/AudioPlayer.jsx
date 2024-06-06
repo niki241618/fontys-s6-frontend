@@ -2,10 +2,9 @@
 import useFetch from "../hooks/useFetch";
 import {useMemo} from "react";
 import LoadingSpinner from "./LoadingSpinner";
-import {getClient} from "../API/axiosClient";
 
 const AudioPlayer = ({fileName}) => {
-    const { data: audioFile, error, isLoading} = useFetch(`/streaming/${fileName}`,getClient(), true, {responseType: 'blob'})
+    const { data: audioFile, error, isLoading} = useFetch(`/streaming/${fileName}`, true, {responseType: 'blob'})
 
     const memoizedAudioFile = useMemo(() => audioFile, [audioFile]);
 
@@ -18,7 +17,7 @@ const AudioPlayer = ({fileName}) => {
     return (
         <div>
             <div>
-                <audio controls>
+                <audio controls className='w-100'>
                     <source src={URL.createObjectURL(memoizedAudioFile)} type="audio/mp3" />
                     Your browser does not support the audio element.
                 </audio>
