@@ -56,7 +56,7 @@ const ProfilePage = () => {
                     </Col>
                 </Row>
             </div>
-            <div className={css.section}>
+            <div className={`${css.section} mb-3`}>
                 <Row>
                     <Col>
                         <div className={'d-flex justify-content-between align-items-center'}>

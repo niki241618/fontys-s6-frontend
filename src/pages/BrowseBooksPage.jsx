@@ -17,7 +17,7 @@ const BrowseBooksPage = () => {
         return null;
 
     return (
-        <div>
+        <div className={'mb-4'}>
             <Container className='mt-3'>
                 <Row className='d-flex justify-content-center pt-2'>
                     <Col xs={6}>
@@ -43,7 +43,6 @@ const BrowseBooksPage = () => {
                             </Col>
                         ))
                     }
-
                 </Row>
             </Container>
 
