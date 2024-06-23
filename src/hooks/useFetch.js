@@ -2,10 +2,11 @@ import {useEffect, useState} from 'react';
 import {toast} from "react-toastify";
 import {getClient} from "../API/axiosClient";
 
-const useFetch = (endpoint, toastify = true, config = {}) => {
-    const [data, setData] = useState(null);
+const useFetch = (endpoint, toastify = true, config, defaultValue = null) => {
+    const [data, setData] = useState(defaultValue);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const client = getClient();
 
     const client = getClient();
 

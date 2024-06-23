@@ -14,10 +14,15 @@ import ArrowBack from "../components/ArrowBack";
 import AudioPlayer from "../components/AudioPlayer";
 import {deleteBook} from "../API/booksService";
 import {toast} from "react-toastify";
+import {useAuth0} from "@auth0/auth0-react";
+import useClaims from "../hooks/useClaims";
 
 const BookPage = () => {
     const { id } = useParams();
     const { data: book, isLoading, error } = useFetch(`/audiobooks/${id}`)
+    const {user} = useAuth0();
+    const {hasClaim} = useClaims()
+
 
     const navigate = useNavigate()
 
@@ -26,6 +31,9 @@ const BookPage = () => {
 
     if (error)
         return null;
+
+    const isBookOwned = user && book.ownerId === user.sub;
+    const isAdmin = hasClaim('role:admin')
 
     const deleteTheBook = async () => {
         try {
@@ -54,19 +62,23 @@ const BookPage = () => {
 
     return (
         <Container className={css.wrapper}>
-            <ArrowBack path='/books' />
+            <ArrowBack path={-1}/>
             <Row>
-                <Col sm={3} className={css.imageColumn}>
-                    <img src={book.coverUri} alt={book.name} className={css.image} data-e2e-test="book-cover"/>
+                <Col md={3} className={`mb-3 mb-md-0 ${css.imageColumn}`}>
+                    <img src={book.coverUri} alt={book.title} className={css.image} data-e2e-test="book-cover"/>
                 </Col>
                 <Col className='ms-2'>
+                    {/*<Row>*/}
+                    {/*    <Col>*/}
+                    {/*        <h2>{book.name}</h2>*/}
+                    {/*    </Col>*/}
+                    {/*</Row>*/}
                     <Row>
                         <Col>
                             <div className='d-flex justify-content-between'>
-                                <h2 className={css.title} data-e2e-test="book-title">{book.name}</h2>
-                                <Button variant='danger' onClick={deleteTheBook} data-e2e-test="delete-button">Delete</Button>
+                                <h2 className={css.title}>{book.name}</h2>
+                                {(isBookOwned || isAdmin) && <Button variant='danger' onClick={deleteTheBook} data-e2e-test="delete-button">Delete</Button>}
                             </div>
-
                             <div className='d-flex align-items-center mt-1'>
                                 <MdPerson size={20}/>
                                 <span data-e2e-test="book-author">{book.authors.slice(0,2).join(', ')}</span>
@@ -88,6 +100,7 @@ const BookPage = () => {
                     </Row>
                 </Col>
             </Row>
+            <hr className='mt-4'/>
             <Row className='mt-4'>
                 <Col>
                     <AudioPlayer fileName={book.audioFileName}/>
