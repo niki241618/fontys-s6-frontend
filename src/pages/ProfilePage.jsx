@@ -24,7 +24,7 @@ const ProfilePage = () => {
             const response = await deleteUserAccount(user.sub)
             if(response.status === 200)
             {
-                await logout()
+                await logout({ logoutParams: { returnTo: window.location.origin } })
             }
             else {
                 toast.error("An error occurred. Please try again.")
@@ -51,7 +51,7 @@ const ProfilePage = () => {
                 </Row>
                 <Row>
                     <Col xs={12}>
-                        <Button onClick={() => logout()} variant='outline-danger'>Logout</Button>
+                        <Button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} variant='outline-danger'>Logout</Button>
                         <Button onClick={() => setShowDeleteUserModal(true)} variant='danger' className='ms-2'>Delete My Account</Button>
                     </Col>
                 </Row>
@@ -81,7 +81,7 @@ const ProfilePage = () => {
             </div>
 
             <Modal show={showDeleteUserModal} onHide={() => setShowDeleteUserModal(false)}>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton={!isDeletionLoading}>
                     <Modal.Title>Delete My Account</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -97,9 +97,7 @@ const ProfilePage = () => {
                     />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="outline-dark" onClick={()=> setShowDeleteUserModal(false)}>
-                        Close
-                    </Button>
+                    {!isDeletionLoading &&  <Button variant="outline-dark" onClick={()=> setShowDeleteUserModal(false)}>Close</Button>}
                     {
                         isDeletionLoading ?
                         <Spinner className='mx-5' variant={'danger'}/>
