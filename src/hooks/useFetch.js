@@ -8,8 +8,6 @@ const useFetch = (endpoint, toastify = true, config, defaultValue = null) => {
     const [error, setError] = useState(null);
     const client = getClient();
 
-    const client = getClient();
-
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
