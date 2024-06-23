@@ -14,16 +14,6 @@ const authConfig = {
 }
 
 const local = {
-    // baseUrl: '', //Currently there is no gateway and the services are called directly
-    auth: authConfig
-}
-
-const staging = {
-    // baseUrl: '', //Currently there is no gateway and the services are called directly
-    auth: authConfig
-}
-
-const production = {
-    // baseUrl: '', //Currently there is no gateway and the services are called directly
+    apiUrl: 'http://localhost:8080/api/',
     auth: authConfig
 }
